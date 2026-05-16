@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from database import read_data, write_data
-from models import Job
+from models import Job, JobUpdate
 import uuid
 
 router = APIRouter()
@@ -28,11 +28,21 @@ def create_job(job: Job):
     return new_job
 
 @router.put("/{job_id}")
-def update_job(job_id: str, updated: Job):
+def update_job(job_id: str, updated: JobUpdate):
     jobs = read_data("jobs.json")
     for i, j in enumerate(jobs):
         if j["id"] == job_id:
-            jobs[i] = {**updated.dict(), "id": job_id, "status": j["status"]}
+            jobs[i] = {**jobs[i], **updated.dict()}
+            write_data("jobs.json", jobs)
+            return jobs[i]
+    raise HTTPException(status_code=404, detail="Job not found")
+
+@router.put("/{job_id}/toggle")
+def toggle_job_status(job_id: str):
+    jobs = read_data("jobs.json")
+    for i, j in enumerate(jobs):
+        if j["id"] == job_id:
+            jobs[i]["status"] = "closed" if j["status"] == "open" else "open"
             write_data("jobs.json", jobs)
             return jobs[i]
     raise HTTPException(status_code=404, detail="Job not found")

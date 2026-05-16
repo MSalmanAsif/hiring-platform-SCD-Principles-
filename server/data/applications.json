@@ -2,7 +2,19 @@
   {
     "job_id": "0fceff2f-241f-4844-9740-5d24c1810506",
     "candidate_id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b",
-    "status": "applied",
+    "status": "interview",
     "id": "32315a3a-bb17-485a-8c45-87186334b63e"
+  },
+  {
+    "job_id": "94da2abc-c2dc-4470-b2e2-e452febc1934",
+    "candidate_id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b",
+    "status": "applied",
+    "id": "7d569c05-9c3b-44e8-b558-ecfef99ec83b"
+  },
+  {
+    "job_id": "b6e93b69-1cdc-4313-a605-30c14d1f5b34",
+    "candidate_id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b",
+    "status": "applied",
+    "id": "047b59b2-f1bc-44b6-97d4-a246085ef127"
   }
 ]

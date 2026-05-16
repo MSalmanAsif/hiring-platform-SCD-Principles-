@@ -8,56 +8,92 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await login(form);
       loginUser(res.data);
       navigate("/jobs");
     } catch {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Welcome Back</h2>
-        <p style={styles.subtitle}>Sign in to your account</p>
-        {error && <p style={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            style={styles.input}
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={e => setForm({ ...form, email: e.target.value })}
-            required
-          />
-          <input
-            style={styles.input}
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={e => setForm({ ...form, password: e.target.value })}
-            required
-          />
-          <button style={styles.button} type="submit">Login</button>
-        </form>
-        <p style={styles.link}>Don't have an account? <Link to="/register">Register</Link></p>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#f5f7fa" }}>
+      {/* Left Panel */}
+      <div style={{ flex: 1, background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)", display: "flex", flexDirection: "column", justifyContent: "center", padding: "3rem", color: "#fff" }}>
+        <h1 style={{ fontSize: "2.5rem", fontWeight: 700, marginBottom: "1rem" }}>HireHub</h1>
+        <p style={{ fontSize: "1.1rem", opacity: 0.85, lineHeight: 1.7 }}>
+          The smart hiring platform connecting top talent with great companies.
+        </p>
+        <div style={{ marginTop: "3rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {["Post jobs in minutes", "Track applications easily", "Find the right fit faster"].map(f => (
+            <div key={f} style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <span style={{ background: "rgba(255,255,255,0.2)", borderRadius: "50%", width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8rem" }}>✓</span>
+              <span style={{ opacity: 0.9 }}>{f}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Panel */}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+        <div style={{ width: "100%", maxWidth: "420px" }}>
+          <h2 style={{ fontSize: "1.75rem", fontWeight: 700, marginBottom: "0.5rem" }}>Welcome back</h2>
+          <p style={{ color: "#6b7280", marginBottom: "2rem" }}>Sign in to your account</p>
+
+          {error && (
+            <div style={{ background: "#fef2f2", border: "1px solid #fecaca", color: "#dc2626", padding: "0.75rem 1rem", borderRadius: "8px", marginBottom: "1rem", fontSize: "0.9rem" }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 500, marginBottom: "0.4rem", color: "#374151" }}>Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={e => setForm({ ...form, email: e.target.value })}
+                required
+                style={{ width: "100%", padding: "0.75rem 1rem", borderRadius: "8px", border: "1.5px solid #e5e7eb", fontSize: "0.95rem", outline: "none", transition: "border 0.2s" }}
+                onFocus={e => e.target.style.border = "1.5px solid #4f46e5"}
+                onBlur={e => e.target.style.border = "1.5px solid #e5e7eb"}
+              />
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 500, marginBottom: "0.4rem", color: "#374151" }}>Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={e => setForm({ ...form, password: e.target.value })}
+                required
+                style={{ width: "100%", padding: "0.75rem 1rem", borderRadius: "8px", border: "1.5px solid #e5e7eb", fontSize: "0.95rem", outline: "none" }}
+                onFocus={e => e.target.style.border = "1.5px solid #4f46e5"}
+                onBlur={e => e.target.style.border = "1.5px solid #e5e7eb"}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              style={{ width: "100%", padding: "0.85rem", background: "linear-gradient(135deg, #4f46e5, #7c3aed)", color: "#fff", border: "none", borderRadius: "8px", fontSize: "1rem", fontWeight: 600, cursor: "pointer", marginTop: "0.5rem" }}
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
+          <p style={{ textAlign: "center", marginTop: "1.5rem", color: "#6b7280", fontSize: "0.9rem" }}>
+            Don't have an account? <Link to="/register" style={{ color: "#4f46e5", fontWeight: 600 }}>Register</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  container: { display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#f5f7fa" },
-  card: { background: "#fff", padding: "2rem", borderRadius: "12px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)", width: "100%", maxWidth: "400px" },
-  title: { margin: "0 0 0.25rem", fontSize: "1.5rem", fontWeight: 700 },
-  subtitle: { margin: "0 0 1.5rem", color: "#666" },
-  input: { width: "100%", padding: "0.75rem", marginBottom: "1rem", borderRadius: "8px", border: "1px solid #ddd", fontSize: "1rem", boxSizing: "border-box" },
-  button: { width: "100%", padding: "0.75rem", background: "#4f46e5", color: "#fff", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer", fontWeight: 600 },
-  error: { color: "red", marginBottom: "1rem" },
-  link: { textAlign: "center", marginTop: "1rem", color: "#666" },
-};

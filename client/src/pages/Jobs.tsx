@@ -8,16 +8,34 @@ interface Job {
   company: string; location: string; recruiter_id: string; status: string;
 }
 
+const Navbar = ({ user, onLogout, onDashboard }: any) => {
+  const initials = user?.name?.split(" ").map((n: string) => n[0]).join("").toUpperCase();
+  return (
+    <div className="navbar-anim" style={{ background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 2rem", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100 }}>
+      <h1 style={{ fontSize: "1.4rem", fontWeight: 700, background: "linear-gradient(135deg, #4f46e5, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", margin: 0 }}>HireHub</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <button className="btn-hover" onClick={onDashboard} style={{ background: "transparent", border: "none", color: "#6b7280", fontWeight: 500, cursor: "pointer", fontSize: "0.95rem" }}>Dashboard</button>
+        <button className="btn-hover" onClick={onLogout} style={{ background: "transparent", border: "none", color: "#6b7280", fontWeight: 500, cursor: "pointer", fontSize: "0.95rem" }}>Logout</button>
+        <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, #4f46e5, #7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "0.85rem" }}>
+          {initials}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function Jobs() {
   const { user, logoutUser } = useAuth();
   const navigate = useNavigate();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [search, setSearch] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ title: "", description: "", company: "", location: "" });
 
   useEffect(() => {
-    getJobs().then(res => setJobs(res.data));
+    getJobs().then(res => { setJobs(res.data); setLoading(false); });
   }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -33,77 +51,119 @@ export default function Jobs() {
     setJobs(jobs.filter(j => j.id !== id));
   };
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.navbar}>
-        <h1 style={styles.logo}>HireHub</h1>
-        <div style={styles.navRight}>
-          <span style={styles.welcome}>Hey, {user?.name} ({user?.role})</span>
-          <button style={styles.navBtn} onClick={() => navigate("/dashboard")}>Dashboard</button>
-          <button style={styles.navBtn} onClick={logoutUser}>Logout</button>
-        </div>
-      </div>
+  const filtered = jobs.filter(j =>
+    j.title.toLowerCase().includes(search.toLowerCase()) &&
+    j.location.toLowerCase().includes(locationFilter.toLowerCase())
+  );
 
-      <div style={styles.content}>
-        <div style={styles.header}>
-          <h2>Open Positions</h2>
+  const locations = [...new Set(jobs.map(j => j.location))];
+
+  const inputStyle: React.CSSProperties = {
+    padding: "0.65rem 1rem", borderRadius: "8px", border: "1.5px solid #e5e7eb",
+    fontSize: "0.9rem", outline: "none", fontFamily: "Inter, sans-serif", width: "100%",
+    transition: "border 0.2s"
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#f5f7fa" }}>
+      <Navbar user={user} onLogout={logoutUser} onDashboard={() => navigate("/dashboard")} />
+
+      {/* Hero Banner */}
+      <div className="hero-banner" style={{ background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)", padding: "2rem 3rem", color: "#fff" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <p style={{ opacity: 0.8, fontSize: "0.85rem", marginBottom: "0.3rem", fontWeight: 500 }}>💼 Job Board</p>
+            <h2 style={{ fontSize: "1.6rem", fontWeight: 800, margin: 0, letterSpacing: "-0.02em" }}>Open Positions</h2>
+            <p style={{ opacity: 0.75, fontSize: "0.875rem", margin: "0.25rem 0 0" }}>{filtered.length} jobs available right now</p>
+          </div>
           {user?.role === "recruiter" && (
-            <button style={styles.primaryBtn} onClick={() => setShowForm(!showForm)}>
-              {showForm ? "Cancel" : "+ Post Job"}
+            <button className="btn-hover" onClick={() => setShowForm(!showForm)} style={{ background: "rgba(255,255,255,0.15)", border: "1.5px solid rgba(255,255,255,0.3)", color: "#fff", padding: "0.65rem 1.5rem", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "0.9rem" }}>
+              {showForm ? "✕ Cancel" : "+ Post Job"}
             </button>
           )}
         </div>
+      </div>
 
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "2rem" }}>
+
+        {/* Search & Filter */}
+        <div className="animate-fadeInUp" style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem" }}>
+          <div style={{ flex: 2, position: "relative" }}>
+            <span style={{ position: "absolute", left: "0.85rem", top: "50%", transform: "translateY(-50%)", color: "#9ca3af" }}>🔍</span>
+            <input
+              placeholder="Search by job title..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              style={{ ...inputStyle, paddingLeft: "2.25rem" }}
+              onFocus={e => e.target.style.border = "1.5px solid #4f46e5"}
+              onBlur={e => e.target.style.border = "1.5px solid #e5e7eb"}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <select value={locationFilter} onChange={e => setLocationFilter(e.target.value)} style={{ ...inputStyle, background: "#fff", cursor: "pointer" }}>
+              <option value="">All Locations</option>
+              {locations.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {/* Post Job Form */}
         {showForm && (
-          <form onSubmit={handleCreate} style={styles.form}>
-            <input style={styles.input} placeholder="Job Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required />
-            <input style={styles.input} placeholder="Company" value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} required />
-            <input style={styles.input} placeholder="Location" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} required />
-            <textarea style={styles.textarea} placeholder="Job Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
-            <button style={styles.primaryBtn} type="submit">Post Job</button>
+          <form onSubmit={handleCreate} className="animate-fadeInUp" style={{ background: "#fff", padding: "1.5rem", borderRadius: "12px", marginBottom: "2rem", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: "0.75rem", border: "1px solid #e5e7eb" }}>
+            <h3 style={{ fontWeight: 600, marginBottom: "0.25rem" }}>Post a New Job</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+              <input style={inputStyle} placeholder="Job Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required onFocus={e => e.target.style.border = "1.5px solid #4f46e5"} onBlur={e => e.target.style.border = "1.5px solid #e5e7eb"} />
+              <input style={inputStyle} placeholder="Company" value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} required onFocus={e => e.target.style.border = "1.5px solid #4f46e5"} onBlur={e => e.target.style.border = "1.5px solid #e5e7eb"} />
+              <input style={inputStyle} placeholder="Location" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} required onFocus={e => e.target.style.border = "1.5px solid #4f46e5"} onBlur={e => e.target.style.border = "1.5px solid #e5e7eb"} />
+            </div>
+            <textarea style={{ ...inputStyle, minHeight: "100px", resize: "vertical" }} placeholder="Job Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
+            <button className="btn-hover" type="submit" style={{ background: "linear-gradient(135deg, #4f46e5, #7c3aed)", color: "#fff", border: "none", padding: "0.75rem 2rem", borderRadius: "8px", fontWeight: 600, cursor: "pointer", alignSelf: "flex-start" }}>
+              Post Job
+            </button>
           </form>
         )}
 
-        <div style={styles.grid}>
-          {jobs.map(job => (
-            <div key={job.id} style={styles.card}>
-              <h3 style={styles.jobTitle}>{job.title}</h3>
-              <p style={styles.company}>{job.company}</p>
-              <p style={styles.location}>📍 {job.location}</p>
-              <p style={styles.desc}>{job.description.slice(0, 100)}...</p>
-              <div style={styles.cardFooter}>
-                <button style={styles.primaryBtn} onClick={() => navigate(`/jobs/${job.id}`)}>View</button>
-                {user?.role === "recruiter" && user.id === job.recruiter_id && (
-                  <button style={styles.dangerBtn} onClick={() => handleDelete(job.id)}>Delete</button>
-                )}
+        {/* Jobs Grid */}
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "4rem", color: "#9ca3af" }}>
+            <p style={{ fontSize: "2rem" }}>⏳</p>
+            <p style={{ marginTop: "0.5rem" }}>Loading jobs...</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="animate-fadeIn" style={{ textAlign: "center", padding: "4rem", color: "#9ca3af" }}>
+            <p style={{ fontSize: "3rem" }}>🔎</p>
+            <p style={{ fontWeight: 600, marginTop: "1rem", color: "#374151" }}>No jobs found</p>
+            <p style={{ fontSize: "0.9rem", marginTop: "0.25rem" }}>Try adjusting your search or filters</p>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.25rem" }}>
+            {filtered.map(job => (
+              <div className="job-card card-hover" key={job.id} style={{ background: "#fff", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", border: "1px solid #e5e7eb" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
+                  <div style={{ width: 42, height: 42, borderRadius: "10px", background: "linear-gradient(135deg, #ede9fe, #c7d2fe)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>💼</div>
+                  <span style={{ background: "#f0fdf4", color: "#16a34a", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 600 }}>● Open</span>
+                </div>
+                <h3 style={{ fontWeight: 700, fontSize: "1rem", marginBottom: "0.25rem" }}>{job.title}</h3>
+                <p style={{ color: "#4f46e5", fontWeight: 600, fontSize: "0.9rem", marginBottom: "0.25rem" }}>{job.company}</p>
+                <p style={{ color: "#9ca3af", fontSize: "0.85rem", marginBottom: "0.75rem" }}>📍 {job.location}</p>
+                <p style={{ color: "#6b7280", fontSize: "0.875rem", lineHeight: 1.6, marginBottom: "1rem" }}>
+                  {job.description.length > 100 ? job.description.slice(0, 100) + "..." : job.description}
+                </p>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <button className="btn-hover" onClick={() => navigate(`/jobs/${job.id}`)} style={{ flex: 1, background: "linear-gradient(135deg, #4f46e5, #7c3aed)", color: "#fff", border: "none", padding: "0.6rem", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "0.875rem" }}>
+                    View Job
+                  </button>
+                  {user?.role === "recruiter" && user.id === job.recruiter_id && (
+                    <button className="btn-hover" onClick={() => handleDelete(job.id)} style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca", padding: "0.6rem 1rem", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "0.875rem" }}>
+                      Delete
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  container: { minHeight: "100vh", background: "#f5f7fa", fontFamily: "sans-serif" },
-  navbar: { background: "#4f46e5", padding: "1rem 2rem", display: "flex", justifyContent: "space-between", alignItems: "center" },
-  logo: { color: "#fff", margin: 0, fontSize: "1.5rem" },
-  navRight: { display: "flex", alignItems: "center", gap: "1rem" },
-  welcome: { color: "#c7d2fe", fontSize: "0.9rem" },
-  navBtn: { background: "transparent", border: "1px solid #c7d2fe", color: "#fff", padding: "0.4rem 1rem", borderRadius: "6px", cursor: "pointer" },
-  content: { padding: "2rem", maxWidth: "1100px", margin: "0 auto" },
-  header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" },
-  form: { background: "#fff", padding: "1.5rem", borderRadius: "12px", marginBottom: "2rem", boxShadow: "0 2px 10px rgba(0,0,0,0.08)", display: "flex", flexDirection: "column", gap: "0.75rem" },
-  input: { padding: "0.75rem", borderRadius: "8px", border: "1px solid #ddd", fontSize: "1rem" },
-  textarea: { padding: "0.75rem", borderRadius: "8px", border: "1px solid #ddd", fontSize: "1rem", minHeight: "100px" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" },
-  card: { background: "#fff", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" },
-  jobTitle: { margin: "0 0 0.25rem", fontSize: "1.1rem", fontWeight: 700 },
-  company: { margin: "0 0 0.25rem", color: "#4f46e5", fontWeight: 600 },
-  location: { margin: "0 0 0.75rem", color: "#888", fontSize: "0.9rem" },
-  desc: { color: "#555", fontSize: "0.9rem", marginBottom: "1rem" },
-  cardFooter: { display: "flex", gap: "0.5rem" },
-  primaryBtn: { background: "#4f46e5", color: "#fff", border: "none", padding: "0.5rem 1.25rem", borderRadius: "8px", cursor: "pointer", fontWeight: 600 },
-  dangerBtn: { background: "#ef4444", color: "#fff", border: "none", padding: "0.5rem 1.25rem", borderRadius: "8px", cursor: "pointer", fontWeight: 600 },
-};
