@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Salman",
+    "email": "nosherwanasif15@gmail.com",
+    "password": "abc",
+    "role": "candidate",
+    "id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b"
+  },
+  {
+    "name": "Asif",
+    "email": "sallugamer99@gmail.com",
+    "password": "abc",
+    "role": "recruiter",
+    "id": "17e8941d-143e-43ea-bb1b-0793f98fdfcb"
+  }
+]
