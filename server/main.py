@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import jobs, applications, auth
+from server.routes import ApplicationController
+from server.routes import JobController, UserController
 
 app = FastAPI(title="Hiring Platform API")
 
@@ -12,9 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
-app.include_router(jobs.router, prefix="/api/jobs", tags=["Jobs"])
-app.include_router(applications.router, prefix="/api/applications", tags=["Applications"])
+app.include_router(UserController.router, prefix="/api/auth", tags=["Auth"])
+app.include_router(JobController.router, prefix="/api/jobs", tags=["Jobs"])
+app.include_router(ApplicationController.router, prefix="/api/applications", tags=["Applications"])
 
 @app.get("/")
 def root():
