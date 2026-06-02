@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-import Login from "./pages/Login";
+import Login from "./pages/LoginForm";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Jobs from "./pages/Jobs";
-import JobDetail from "./pages/JobDetail";
+import Dashboard from "./pages/DashboardForm";
+import Jobs from "./pages/JobListForm";
+import JobDetail from "./pages/JobDetailForm";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import Admin from "./pages/Admin";
+import Profile from "./pages/ProfileForm";
+import Admin from "./pages/AdminForm";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();

@@ -1,38 +1,38 @@
 [
   {
-    "title": "SWE",
-    "description": "F around",
-    "company": "7C REPORT",
+    "title": "SWE-I",
+    "description": "Role: Entry-level software engineer responsible for building, testing, and maintaining software features under guidance.\n\nKey Responsibilities:\n- Code: Write clean, well-documented code for features/bug fixes in assigned modules\n- Test: Create unit tests, debug issues, and ensure code quality\n- Collaborate: Work with senior engineers, PMs, and QA to understand requirements\n- Learn: Ramp up on codebase, tools, and best practices; take feedback actively\n- Ship: Deliver small-to-medium tasks on time within sprints\n\nRequirements:\n- Education: BS in CS/related field or equivalent experience\n- Skills: Proficiency in 1+ language like Python/Java/C++, basic DSA, Git\n- Must-have: Problem-solving skills, ability to learn quickly, good communication\n\nTypical Scope: Owns individual tickets, not full systems. Usually 0-2 years experience.\n",
+    "company": "7C Report",
     "location": "ISB",
     "recruiter_id": "17e8941d-143e-43ea-bb1b-0793f98fdfcb",
-    "id": "0fceff2f-241f-4844-9740-5d24c1810506",
+    "id": "e998b22b-9e50-4a9d-8cbc-46af9b1512ab",
     "status": "open"
   },
   {
-    "title": "MTO Intern",
-    "description": "F around",
-    "company": "Gigga Niggas",
+    "title": "Flutter Intern",
+    "description": "Role: Support the mobile dev team by building and testing UI features in Flutter apps under mentorship.\n\nKey Responsibilities:\n- Build UI: Convert designs into responsive screens using Flutter/Dart widgets\n- Fix Bugs: Debug layout, performance, and functionality issues on Android/iOS\n- Integrate APIs: Connect frontend to REST APIs using http/dio, handle state with Provider/Riverpod/Bloc\n- Test: Write widget tests and test on multiple devices/emulators\n- Collaborate: Attend standups, code reviews, and work with designers/backend devs\n\nRequirements:\n- Skills: Basic Dart, Flutter widgets, Git. Familiarity with state management is a plus\n- Knowledge: Understanding of mobile app lifecycle, REST APIs, responsive design\n- Soft Skills: Eager to learn, detail-oriented, able to take feedback\n\nTypical Scope: 1-3 months, owns small UI features. Portfolio/GitHub with Flutter projects preferred.",
+    "company": "Zones pvt Lt",
+    "location": "ISB",
+    "recruiter_id": "17e8941d-143e-43ea-bb1b-0793f98fdfcb",
+    "id": "51d9077b-0729-4d7e-8e7e-9937a1236ed4",
+    "status": "open"
+  },
+  {
+    "title": "Graphic Design Intern",
+    "description": "Role: Support the design team by creating visual assets for social media, web, and marketing under guidance.\n\nKey Responsibilities:\n- Design: Create graphics for posts, ads, presentations, and web using Figma/Photoshop/Illustrator\n- Branding: Maintain brand consistency across all assets\n- Iterate: Take feedback, revise designs quickly, and manage multiple small tasks\n- Research: Look up trends, references, and assets for new campaigns\n- Organize: Manage file versions and export assets in correct formats\n\nRequirements:\n- Skills: Basic proficiency in Figma, Photoshop, or Illustrator. Knowledge of typography, color theory, layout\n- Portfolio: 3-5 design samples or student projects required\n- Soft Skills: Creative, open to feedback, detail-oriented, meets deadlines\n\nTypical Scope: 2-6 months, owns small assets and social content. Interns usually don\u2019t lead full campaigns.",
+    "company": "Folio3",
     "location": "KHI",
     "recruiter_id": "17e8941d-143e-43ea-bb1b-0793f98fdfcb",
-    "id": "eafdadce-7cd7-4673-ad5b-7992693d5d67",
+    "id": "b03828a1-71ee-497a-b78c-ff8818b90680",
     "status": "open"
   },
   {
-    "title": "JS Dev",
-    "description": "F around",
-    "company": "Pussies",
-    "location": "LHR",
+    "title": "Fullstack Dev",
+    "description": "Role: Build and maintain both frontend and backend features for web applications end-to-end.\n\nKey Responsibilities:\n- Frontend: Develop responsive UIs with React/Vue/Angular, HTML, CSS, JS/TS\n- Backend: Build APIs and business logic using http://Node.js/Python/Java/.NET, handle DB queries\n- Database: Design schemas, write queries for SQL/NoSQL databases\n- Integration: Connect services, third-party APIs, and manage auth/authz\n- DevOps: Deploy apps, set up CI/CD, monitor logs and performance\n- Debug: Troubleshoot issues across the full stack\n\nRequirements:\n- Skills: 1+ frontend framework, 1+ backend language, SQL basics, Git, REST APIs\n- Nice to have: Docker, AWS/GCP, testing frameworks, system design basics\n- Mindset: Can own features from DB to UI, comfortable switching context\n\nTypical Scope: Owns features end-to-end. Mid-level roles usually 2-4 years experience.\n",
+    "company": "10Pearls",
+    "location": "KHI",
     "recruiter_id": "17e8941d-143e-43ea-bb1b-0793f98fdfcb",
-    "id": "b6e93b69-1cdc-4313-a605-30c14d1f5b34",
-    "status": "open"
-  },
-  {
-    "title": "Rusher",
-    "description": "F'em all",
-    "company": "FF",
-    "location": "Remote",
-    "recruiter_id": "17e8941d-143e-43ea-bb1b-0793f98fdfcb",
-    "id": "94da2abc-c2dc-4470-b2e2-e452febc1934",
+    "id": "64216945-51dc-403e-9965-916612c98986",
     "status": "open"
   }
 ]
