@@ -16,5 +16,17 @@
     "candidate_id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b",
     "status": "applied",
     "id": "047b59b2-f1bc-44b6-97d4-a246085ef127"
+  },
+  {
+    "job_id": "e998b22b-9e50-4a9d-8cbc-46af9b1512ab",
+    "candidate_id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b",
+    "status": "applied",
+    "id": "5d026447-4f8a-43df-b48a-5b85d39e6566"
+  },
+  {
+    "job_id": "64216945-51dc-403e-9965-916612c98986",
+    "candidate_id": "76a6bb4d-56ff-4e6e-9edc-b469494c3e1b",
+    "status": "applied",
+    "id": "0b62e576-ad79-4309-aff2-9ddf0acd5207"
   }
 ]

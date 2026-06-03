@@ -58,7 +58,7 @@ export default function Admin() {
       <div className="hero-banner" style={{ background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)", padding: "2.5rem 3rem", color: "#fff" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <p style={{ opacity: 0.8, fontSize: "0.9rem", marginBottom: "0.4rem", fontWeight: 500 }}>🛡️ Admin Panel</p>
+            <p style={{ opacity: 0.8, fontSize: "0.9rem", marginBottom: "0.4rem", fontWeight: 500 }}>Admin Panel</p>
             <h2 style={{ fontSize: "1.75rem", fontWeight: 800, margin: "0 0 0.25rem", letterSpacing: "-0.02em" }}>Platform Overview</h2>
             <p style={{ opacity: 0.75, fontSize: "0.9rem", margin: 0 }}>Manage all users, jobs, and applications.</p>
           </div>

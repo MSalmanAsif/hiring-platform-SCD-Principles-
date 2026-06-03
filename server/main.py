@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from server.routes import ApplicationController
-from server.routes import JobController, UserController
+from routes import UserController, JobController, ApplicationController
 
 app = FastAPI(title="Hiring Platform API")
 
