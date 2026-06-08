@@ -5,10 +5,10 @@ import { useAuth } from "../context/AuthContext";
 
 interface Job {
   id: string; title: string; description: string;
-  company: string; location: string; recruiter_id: string; status: string;
+  company: string; location: string; recruiterId: string; status: string;
 }
 interface Application {
-  id: string; job_id: string; candidate_id: string;
+  id: string; jobId: string; candidateId: string;
   status: "applied" | "shortlisted" | "rejected" | "interview";
 }
 
@@ -81,7 +81,7 @@ export default function Dashboard() {
         setJobMap(map);
       } else if (user?.role === "recruiter") {
         const jobsRes = await getJobs();
-        const myJobs = jobsRes.data.filter((j: Job) => j.recruiter_id === user.id);
+        const myJobs = jobsRes.data.filter((j: Job) => j.recruiterId === user.id);
         setJobs(myJobs);
         const allApps: Application[] = [];
         for (const job of myJobs) {
@@ -92,7 +92,10 @@ export default function Dashboard() {
       }
       setLoading(false);
     };
+
     load();
+    window.addEventListener("focus", load);
+    return () => window.removeEventListener("focus", load);
   }, []);
 
   if (loading) return (
@@ -171,7 +174,7 @@ export default function Dashboard() {
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {applications.map(app => {
-                  const job = jobMap[app.job_id];
+                  const job = jobMap[app.jobId];
                   const cfg = statusConfig[app.status];
                   return (
                     <div className="app-card card-hover" key={app.id} style={{ border: "1px solid #e5e7eb", borderRadius: "12px", padding: "1.25rem 1.5rem", background: "#fafafa" }}>
@@ -185,7 +188,7 @@ export default function Dashboard() {
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                           <span style={{ background: cfg.bg, color: cfg.color, padding: "0.3rem 0.9rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 700 }}>{cfg.label}</span>
-                          <button className="btn-hover" onClick={() => navigate(`/jobs/${app.job_id}`)} style={{ background: "#fff", border: "1.5px solid #e5e7eb", color: "#4f46e5", padding: "0.35rem 0.9rem", borderRadius: "8px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>View →</button>
+                          <button className="btn-hover" onClick={() => navigate(`/jobs/${app.jobId}`)} style={{ background: "#fff", border: "1.5px solid #e5e7eb", color: "#4f46e5", padding: "0.35rem 0.9rem", borderRadius: "8px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>View →</button>
                         </div>
                       </div>
                       {app.status !== "rejected" && <StatusTimeline status={app.status} />}
@@ -218,7 +221,7 @@ export default function Dashboard() {
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.25rem" }}>
                 {jobs.map(job => {
-                  const jobApps = applications.filter(a => a.job_id === job.id);
+                  const jobApps = applications.filter(a => a.jobId === job.id);
                   const shortlisted = jobApps.filter(a => a.status === "shortlisted").length;
                   const interview = jobApps.filter(a => a.status === "interview").length;
                   const rejected = jobApps.filter(a => a.status === "rejected").length;
@@ -226,7 +229,9 @@ export default function Dashboard() {
                     <div className="job-card card-hover" key={job.id} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: "16px", padding: "1.5rem", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
                         <div style={{ width: 44, height: 44, borderRadius: "10px", background: "linear-gradient(135deg, #ede9fe, #c7d2fe)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.25rem" }}>💼</div>
-                        <span style={{ background: "#f0fdf4", color: "#16a34a", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>● Open</span>
+                        <span style={{ background: job.status === "open" ? "#f0fdf4" : "#f3f4f6", color: job.status === "open" ? "#16a34a" : "#6b7280", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                          {job.status === "open" ? "● Open" : "● Closed"}
+                        </span>
                       </div>
                       <h3 style={{ fontWeight: 700, fontSize: "1rem", margin: "0 0 0.25rem" }}>{job.title}</h3>
                       <p style={{ color: "#4f46e5", fontWeight: 600, fontSize: "0.875rem", margin: "0 0 0.15rem" }}>{job.company}</p>

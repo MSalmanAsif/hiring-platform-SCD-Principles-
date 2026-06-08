@@ -93,8 +93,7 @@ export default function Register() {
             </div>
             <div>
               <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 500, marginBottom: "0.4rem", color: "#374151" }}>I am a...</label>
-              <select
-                value={form.role}
+              <select value={form.role}
                 onChange={e => setForm({ ...form, role: e.target.value })}
                 style={{ ...inputStyle, background: "#fff", cursor: "pointer" }}
               >

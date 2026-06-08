@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getJob, applyForJob, getJobApplications, updateAppStatus } from "../services/api";
+import { getJob, applyForJob, getJobApplications, updateAppStatus, getMyApplications } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 interface Job {
   id: string; title: string; description: string;
-  company: string; location: string; recruiter_id: string; status: string;
+  company: string; location: string; recruiterId: string; status: string;
 }
 interface Application {
-  id: string; job_id: string; candidate_id: string;
+  id: string; jobId: string; candidateId: string;
   status: "applied" | "shortlisted" | "rejected" | "interview";
 }
 
@@ -30,11 +30,17 @@ export default function JobDetail() {
     if (user?.role === "recruiter") {
       getJobApplications(id!).then(res => setApplications(res.data));
     }
+    if (user?.role === "candidate") {
+      getMyApplications(user.id).then(res => {
+        const alreadyApplied = res.data.some((a: Application) => a.jobId === id);
+        setApplied(alreadyApplied);
+      });
+    }
   }, [id]);
 
   const handleApply = async () => {
     try {
-      await applyForJob({ job_id: id, candidate_id: user!.id, status: "applied" });
+      await applyForJob({ jobId: id, candidateId: user!.id });
       setApplied(true);
       setMessage("Application submitted successfully!");
     } catch {
@@ -80,7 +86,7 @@ export default function JobDetail() {
             {applications.length === 0 && <p style={{ color: "#888" }}>No applications yet.</p>}
             {applications.map(app => (
               <div key={app.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 0", borderBottom: "1px solid #f0f0f0", gap: "1rem" }}>
-                <span>Candidate: {app.candidate_id}</span>
+                <span>Candidate: {app.candidateId}</span>
                 <span style={{ background: statusColors[app.status], color: "#fff", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 600 }}>{app.status}</span>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <button onClick={() => handleStatus(app.id, "shortlisted")} style={{ background: "#22c55e", color: "#fff", border: "none", padding: "0.3rem 0.75rem", borderRadius: "6px", cursor: "pointer" }}>Shortlist</button>

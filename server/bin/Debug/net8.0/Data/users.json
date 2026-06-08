@@ -16,9 +16,9 @@
     "email": "sufyan@gmail.com",
     "password": "abc",
     "role": "candidate",
-    "bio": "5th sem BS-SE student at KIET.",
-    "skills": "Agentic AI",
-    "phone": "\u002B92 3333333333",
+    "bio": "",
+    "skills": "",
+    "phone": "",
     "savedJobs": []
   },
   {
@@ -49,9 +49,9 @@
     "email": "salman@gmail.com",
     "password": "abc",
     "role": "candidate",
-    "bio": "Aspiring full stack dev.",
-    "skills": "JS,C#,Python",
-    "phone": "\u002B92 3332654777",
+    "bio": "",
+    "skills": "",
+    "phone": "",
     "savedJobs": []
   }
 ]

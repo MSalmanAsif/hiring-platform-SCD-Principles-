@@ -1,3 +1,4 @@
+import { type ReactNode } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Login from "./pages/LoginForm";
@@ -9,7 +10,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/ProfileForm";
 import Admin from "./pages/AdminForm";
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   return user ? children : <Navigate to="/login" />;
 };

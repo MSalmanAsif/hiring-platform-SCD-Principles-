@@ -4,8 +4,8 @@ import { getAllUsers, getJobs, deleteUser, deleteJob, getAllApplications } from 
 import { useAuth } from "../context/AuthContext";
 
 interface User { id: string; name: string; email: string; role: string; }
-interface Job { id: string; title: string; company: string; location: string; recruiter_id: string; status: string; }
-interface Application { id: string; job_id: string; candidate_id: string; status: string; }
+interface Job { id: string; title: string; company: string; location: string; recruiterId: string; status: string; }
+interface Application { id: string; jobId: string; candidateId: string; status: string; }
 
 export default function Admin() {
   const { user, logoutUser } = useAuth();
@@ -24,11 +24,13 @@ export default function Admin() {
   }, []);
 
   const handleDeleteUser = async (id: string) => {
+    if (!window.confirm("Delete this user? This cannot be undone.")) return;
     await deleteUser(id);
     setUsers(users.filter(u => u.id !== id));
   };
 
   const handleDeleteJob = async (id: string) => {
+    if (!window.confirm("Delete this job? This cannot be undone.")) return;
     await deleteJob(id);
     setJobs(jobs.filter(j => j.id !== id));
   };
@@ -138,7 +140,7 @@ export default function Admin() {
                     {j.status === "open" ? "● Open" : "● Closed"}
                   </span>
                   <span style={{ background: "#f3f4f6", color: "#6b7280", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 600 }}>
-                    {applications.filter(a => a.job_id === j.id).length} applicants
+                    {applications.filter(a => a.jobId === j.id).length} applicants
                   </span>
                   <button className="btn-hover" onClick={() => handleDeleteJob(j.id)} style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca", padding: "0.3rem 0.75rem", borderRadius: "6px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>Delete</button>
                 </div>
@@ -155,8 +157,8 @@ export default function Admin() {
               <span style={{ background: "#f0fdf4", color: "#16a34a", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 600 }}>{applications.length} total</span>
             </div>
             {applications.map(a => {
-              const job = jobs.find(j => j.id === a.job_id);
-              const candidate = users.find(u => u.id === a.candidate_id);
+              const job = jobs.find(j => j.id === a.jobId);
+              const candidate = users.find(u => u.id === a.candidateId);
               const statusColors: Record<string, { bg: string; color: string }> = {
                 applied:     { bg: "#ede9fe", color: "#4f46e5" },
                 shortlisted: { bg: "#f0fdf4", color: "#16a34a" },

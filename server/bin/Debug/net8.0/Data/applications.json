@@ -3,7 +3,7 @@
     "id": "app-c6a29bef",
     "jobId": "job-40f3ecd7",
     "candidateId": "user-f886c8de",
-    "status": "shortlisted"
+    "status": "applied"
   },
   {
     "id": "app-f8a91506",
@@ -15,12 +15,6 @@
     "id": "app-d2ff037c",
     "jobId": "job-40f3ecd7",
     "candidateId": "user-5b612786",
-    "status": "applied"
-  },
-  {
-    "id": "app-169144eb",
-    "jobId": "job-3ffce88a",
-    "candidateId": "user-6bd9d67e",
     "status": "applied"
   }
 ]

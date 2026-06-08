@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 
 interface Job {
   id: string; title: string; description: string;
-  company: string; location: string; recruiter_id: string; status: string;
+  company: string; location: string; recruiterId: string; status: string;
 }
 
 const Navbar = ({ user, onLogout, onDashboard }: any) => {
@@ -40,13 +40,14 @@ export default function Jobs() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await createJob({ ...form, recruiter_id: user!.id });
+    const res = await createJob({ ...form, recruiterId: user!.id });
     setJobs([...jobs, res.data]);
     setForm({ title: "", description: "", company: "", location: "" });
     setShowForm(false);
   };
 
   const handleDelete = async (id: string) => {
+    if (!window.confirm("Delete this job? This cannot be undone.")) return;
     await deleteJob(id);
     setJobs(jobs.filter(j => j.id !== id));
   };
@@ -141,7 +142,9 @@ export default function Jobs() {
               <div className="job-card card-hover" key={job.id} style={{ background: "#fff", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", border: "1px solid #e5e7eb" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
                   <div style={{ width: 42, height: 42, borderRadius: "10px", background: "linear-gradient(135deg, #ede9fe, #c7d2fe)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem" }}>💼</div>
-                  <span style={{ background: "#f0fdf4", color: "#16a34a", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 600 }}>● Open</span>
+                  <span style={{ background: job.status === "open" ? "#f0fdf4" : "#f3f4f6", color: job.status === "open" ? "#16a34a" : "#6b7280", padding: "0.25rem 0.75rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 600 }}>
+                    {job.status === "open" ? "● Open" : "● Closed"}
+                  </span>
                 </div>
                 <h3 style={{ fontWeight: 700, fontSize: "1rem", marginBottom: "0.25rem" }}>{job.title}</h3>
                 <p style={{ color: "#4f46e5", fontWeight: 600, fontSize: "0.9rem", marginBottom: "0.25rem" }}>{job.company}</p>
@@ -153,7 +156,7 @@ export default function Jobs() {
                   <button className="btn-hover" onClick={() => navigate(`/jobs/${job.id}`)} style={{ flex: 1, background: "linear-gradient(135deg, #4f46e5, #7c3aed)", color: "#fff", border: "none", padding: "0.6rem", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "0.875rem" }}>
                     View Job
                   </button>
-                  {user?.role === "recruiter" && user.id === job.recruiter_id && (
+                  {user?.role === "recruiter" && user.id === job.recruiterId && (
                     <button className="btn-hover" onClick={() => handleDelete(job.id)} style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca", padding: "0.6rem 1rem", borderRadius: "8px", fontWeight: 600, cursor: "pointer", fontSize: "0.875rem" }}>
                       Delete
                     </button>
